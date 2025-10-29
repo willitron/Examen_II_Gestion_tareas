@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title mb-4">
+                    <i class="bi bi-plus-circle"></i> Nueva Tarea
+                </h2>
+                <form method="POST" action="{{ url_for('task.create_task') }}">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <input type="text" class="form-control" name="title" 
+                                   placeholder="Título de la tarea" required>
+                        </div>
+                        <div class="col-md-5">
+                            <input type="text" class="form-control" name="description" 
+                                   placeholder="Descripción (opcional)">
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-plus-lg"></i> Crear
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title mb-4">
+                    <i class="bi bi-list-check"></i> Mis Tareas
+                </h2>
+                
+                {% if tasks %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th width="5%">Estado</th>
+                                <th width="25%">Título</th>
+                                <th width="40%">Descripción</th>
+                                <th width="15%">Fecha</th>
+                                <th width="15%">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for task in tasks %}
+                            <tr {% if task.completed %}class="table-secondary"{% endif %}>
+                                <td class="text-center">
+                                    <form method="POST" action="{{ url_for('task.toggle_task', task_id=task.id) }}" style="display: inline;">
+                                        <button type="submit" class="btn btn-sm btn-link p-0" title="Marcar como completada">
+                                            {% if task.completed %}
+                                            <i class="bi bi-check-circle-fill text-success fs-4"></i>
+                                            {% else %}
+                                            <i class="bi bi-circle text-secondary fs-4"></i>
+                                            {% endif %}
+                                        </button>
+                                    </form>
+                                </td>
+                                <td {% if task.completed %}class="text-decoration-line-through"{% endif %}>
+                                    <strong>{{ task.title }}</strong>
+                                </td>
+                                <td {% if task.completed %}class="text-decoration-line-through"{% endif %}>
+                                    {{ task.description or '-' }}
+                                </td>
+                                <td>
+                                    <small class="text-muted">{{ task.created_at[:16] }}</small>
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('task.edit_task', task_id=task.id) }}" 
+                                       class="btn btn-sm btn-outline-primary" title="Editar">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form method="POST" action="{{ url_for('task.delete_task', task_id=task.id) }}" 
+                                          style="display: inline;" onsubmit="return confirm('¿Estás seguro de eliminar esta tarea?');">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Eliminar">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info text-center">
+                    <i class="bi bi-info-circle"></i> No tienes tareas aún. Crea tu primera tarea usando el formulario de arriba.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Mis Tareas{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title mb-4">
+                    <i class="bi bi-list-check"></i> Mis Tareas
+                </h2>
+                
+                {% if tasks %}
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                    {% for task in tasks %}
+                    <div class="col">
+                        <div class="card task-card h-100 {% if task.completed %}task-completed{% endif %}">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    {% if task.completed %}
+                                    <i class="bi bi-check-circle-fill text-success"></i>
+                                    {% else %}
+                                    <i class="bi bi-circle text-secondary"></i>
+                                    {% endif %}
+                                    {{ task.title }}
+                                </h5>
+                                <p class="card-text">{{ task.description or 'Sin descripción' }}</p>
+                                <small class="text-muted">
+                                    <i class="bi bi-calendar"></i> {{ task.created_at }}
+                                </small>
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <span class="badge {% if task.completed %}bg-success{% else %}bg-warning{% endif %}">
+                                    {% if task.completed %}Completada{% else %}Pendiente{% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="alert alert-info text-center">
+                    <i class="bi bi-info-circle"></i> No tienes tareas aún. 
+                    <a href="{{ url_for('task.dashboard') }}" class="alert-link">Ir al Dashboard para crear tareas</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
