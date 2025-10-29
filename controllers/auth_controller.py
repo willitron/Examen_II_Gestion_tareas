@@ -6,7 +6,6 @@ auth_bp = Blueprint('auth', __name__)
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
-    """Registro de nuevos usuarios"""
     if 'user_id' in session:
         return redirect(url_for('task.dashboard'))
     
@@ -14,14 +13,12 @@ def register():
         username = request.form.get('username', '').strip()
         password = request.form.get('password', '')
         
-        # Validar datos
         errors = validate_registration(username, password)
         if errors:
             for error in errors:
                 flash(error, 'danger')
             return render_template('register.html')
         
-        # Crear usuario
         user_id = User.create(username, password)
         if user_id:
             flash('Registro exitoso. Por favor, inicia sesión', 'success')
@@ -34,7 +31,6 @@ def register():
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
-    """Inicio de sesión"""
     if 'user_id' in session:
         return redirect(url_for('task.dashboard'))
     
@@ -56,7 +52,6 @@ def login():
 
 @auth_bp.route('/logout')
 def logout():
-    """Cierre de sesión"""
     session.clear()
     flash('Sesión cerrada correctamente', 'info')
     return redirect(url_for('auth.login'))

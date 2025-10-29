@@ -11,7 +11,6 @@ class Task:
     
     @staticmethod
     def create(title, description, user_id):
-        """Crea una nueva tarea"""
         conn = get_db()
         cursor = conn.cursor()
         cursor.execute(
@@ -25,7 +24,6 @@ class Task:
     
     @staticmethod
     def get_all_by_user(user_id):
-        """Obtiene todas las tareas de un usuario"""
         conn = get_db()
         cursor = conn.cursor()
         cursor.execute(
@@ -45,7 +43,6 @@ class Task:
     
     @staticmethod
     def get_by_id(task_id, user_id):
-        """Obtiene una tarea específica del usuario"""
         conn = get_db()
         cursor = conn.cursor()
         cursor.execute(
@@ -64,7 +61,6 @@ class Task:
     
     @staticmethod
     def update(task_id, title, description, user_id):
-        """Actualiza una tarea"""
         conn = get_db()
         cursor = conn.cursor()
         cursor.execute(
@@ -76,7 +72,6 @@ class Task:
     
     @staticmethod
     def toggle_completed(task_id, user_id):
-        """Marca una tarea como completada o no completada"""
         conn = get_db()
         cursor = conn.cursor()
         cursor.execute(
@@ -88,7 +83,6 @@ class Task:
     
     @staticmethod
     def delete(task_id, user_id):
-        """Elimina una tarea"""
         conn = get_db()
         cursor = conn.cursor()
         cursor.execute(

@@ -6,7 +6,6 @@ task_bp = Blueprint('task', __name__)
 
 @task_bp.route('/')
 def index():
-    """Página principal - muestra todas las tareas del usuario"""
     if 'user_id' not in session:
         return redirect(url_for('auth.login'))
     
@@ -16,14 +15,12 @@ def index():
 @task_bp.route('/dashboard')
 @login_required
 def dashboard():
-    """Dashboard del usuario - muestra y permite gestionar tareas"""
     tasks = Task.get_all_by_user(session['user_id'])
     return render_template('dashboard.html', tasks=tasks)
 
 @task_bp.route('/task/create', methods=['POST'])
 @login_required
 def create_task():
-    """Crea una nueva tarea"""
     title = request.form.get('title', '').strip()
     description = request.form.get('description', '').strip()
     
@@ -38,7 +35,6 @@ def create_task():
 @task_bp.route('/task/<int:task_id>/toggle', methods=['POST'])
 @login_required
 def toggle_task(task_id):
-    """Marca una tarea como completada o no completada"""
     task = Task.get_by_id(task_id, session['user_id'])
     if task:
         Task.toggle_completed(task_id, session['user_id'])
@@ -51,7 +47,6 @@ def toggle_task(task_id):
 @task_bp.route('/task/<int:task_id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit_task(task_id):
-    """Edita una tarea existente"""
     task = Task.get_by_id(task_id, session['user_id'])
     
     if not task:
@@ -75,7 +70,6 @@ def edit_task(task_id):
 @task_bp.route('/task/<int:task_id>/delete', methods=['POST'])
 @login_required
 def delete_task(task_id):
-    """Elimina una tarea"""
     task = Task.get_by_id(task_id, session['user_id'])
     if task:
         Task.delete(task_id, session['user_id'])

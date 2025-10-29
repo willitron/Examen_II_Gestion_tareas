@@ -53,5 +53,4 @@ class User:
         return None
     
     def verify_password(self, password):
-        """Verifica si la contraseña es correcta"""
         return check_password_hash(self.password_hash, password)
